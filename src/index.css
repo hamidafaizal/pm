@@ -64,3 +64,84 @@ h1, h2, h3 {
   background-color: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.4);
 }
+
+.btn-glass {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem; /* default size */
+  border-radius: 14px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+  border: 1px solid var(--border-color);
+  box-shadow:
+    0 4px 14px rgba(0,0,0,0.08),    /* outer soft */
+    inset 0 1px 0 rgba(255,255,255,0.10); /* inner highlight */
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  transition: background 200ms ease, box-shadow 200ms ease, border-color 200ms ease, transform 80ms ease;
+}
+.btn-glass:hover {
+  background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.10));
+  border-color: rgba(255,255,255,0.35);
+  box-shadow:
+    0 6px 18px rgba(0,0,0,0.10),
+    inset 0 1px 0 rgba(255,255,255,0.14);
+}
+.btn-glass:active {
+  transform: translateY(0.5px);
+  background: linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.08));
+  box-shadow:
+    0 2px 10px rgba(0,0,0,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+}
+.btn-glass:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px rgba(59,130,246,0.45), /* blue focus ring */
+    0 8px 18px rgba(0,0,0,0.10);
+}
+.btn-glass:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+/* Size variants */
+.btn-glass--sm { padding: 0.375rem 0.625rem; font-size: 0.875rem; border-radius: 12px; }
+.btn-glass--lg { padding: 0.625rem 1rem; font-size: 1rem; border-radius: 16px; }
+/* Icon-only utility (optional) */
+.btn-glass--icon { padding: 0.5rem; border-radius: 12px; }
+
+.btn-reveal {
+  position: relative;
+  overflow: hidden;
+}
+.btn-reveal__icon {
+  transition: transform 180ms ease;
+  will-change: transform;
+}
+.btn-reveal__label {
+  max-width: 0;               /* disembunyikan saat idle */
+  opacity: 0;
+  margin-left: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: max-width 260ms ease, opacity 180ms ease, margin-left 180ms ease;
+}
+/* Saat hover atau keyboard focus, label muncul & tombol melebar */
+.btn-reveal:hover .btn-reveal__label,
+.btn-reveal:focus-visible .btn-reveal__label {
+  max-width: 240px;           /* cukup besar untuk judul tombol */
+  opacity: 1;
+  margin-left: 0.5rem;        /* jarak antara icon dan teks */
+}
+.btn-reveal:hover .btn-reveal__icon,
+.btn-reveal:focus-visible .btn-reveal__icon {
+  transform: translateX(2px);
+}
+/* Aksesibilitas: kurangi animasi jika user memilih reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .btn-reveal__label { transition: none; }
+  .btn-reveal__icon { transition: none; }
+}
