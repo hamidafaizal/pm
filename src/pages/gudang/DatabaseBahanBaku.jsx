@@ -1,13 +1,16 @@
 // src/pages/gudang/DatabaseBahanBaku.jsx
 import React from "react";
-import Button from "../../components/Button";
+import Button from "../../components/Button.jsx"; // Mengubah jalur impor agar sesuai
+import { Plus } from "lucide-react"; // Import ikon Plus
 
 export default function DatabaseBahanBaku({ onAdd }) {
   const handleTambah = () => {
+    // console.log untuk melacak klik tombol
+    console.log("Tombol Tambah Bahan Baku diklik");
     if (typeof onAdd === "function") {
       onAdd();
     } else {
-      console.log("Tambah Bahan Baku diklik");
+      console.log("Fungsi onAdd tidak disediakan atau bukan fungsi.");
     }
   };
 
@@ -20,7 +23,7 @@ export default function DatabaseBahanBaku({ onAdd }) {
         </h1>
 
         {/* Tombol reusable: idle ikon "+", hover/focus menampilkan label */}
-        <Button onClick={handleTambah} size="lg" reveal icon="+">
+        <Button onClick={handleTambah} size="lg" reveal icon={<Plus size={20} />}>
           Tambah Bahan Baku
         </Button>
       </div>
