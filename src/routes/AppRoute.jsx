@@ -1,16 +1,17 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Login from '../auth/Login';
-import Register from '../auth/Register';
-import MainLayout from '../layouts/MainLayout';
-import GudangLayout from '../layouts/GudangLayout';
-import App from '../App';
-import Gudang from '../pages/Gudang';
-import DatabaseBahanBaku from '../pages/gudang/DatabaseBahanBaku';
-import Pengaturan from '../pages/gudang/Pengaturan';
-import KategoriBarang from '../pages/gudang/pengaturan/KategoriBarang';
-import SatuanBarang from '../pages/gudang/pengaturan/SatuanBarang';
-import PrivateRoute from './PrivateRoute';
+import Login from '../auth/Login.jsx';
+import Register from '../auth/Register.jsx';
+import MainLayout from '../layouts/MainLayout.jsx';
+import GudangLayout from '../layouts/GudangLayout.jsx';
+import App from '../App.jsx';
+import Gudang from '../pages/Gudang.jsx';
+import DatabaseBahanBaku from '../pages/gudang/DatabaseBahanBaku.jsx';
+import BahanBaku from '../pages/gudang/BahanBaku.jsx'; // Impor komponen BahanBaku
+import Pengaturan from '../pages/gudang/Pengaturan.jsx';
+import KategoriBarang from '../pages/gudang/pengaturan/KategoriBarang.jsx';
+import SatuanBarang from '../pages/gudang/pengaturan/SatuanBarang.jsx';
+import PrivateRoute from './PrivateRoute.jsx';
 
 function AppRoute() {
   // Komponen yang mengatur semua routing aplikasi
@@ -33,6 +34,7 @@ function AppRoute() {
           <Route path="/gudang" element={<GudangLayout />}>
             <Route index element={<Gudang />} />
             <Route path="database-bahan-baku" element={<DatabaseBahanBaku />} />
+            <Route path="bahan-baku" element={<BahanBaku />} /> {/* Rute baru untuk Bahan Baku */}
             <Route path="pengaturan" element={<Pengaturan />} />
             <Route path="pengaturan/kategori-barang" element={<KategoriBarang />} />
             <Route path="pengaturan/satuan-barang" element={<SatuanBarang />} />
