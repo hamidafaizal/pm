@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save } from 'lucide-react';
-import { supabase } from '../../../../src/supabase/client.js';
-import Button from '../../../../src/components/Button.jsx';
+import { supabase } from '../../../supabase/client.js';
+import Button from '../../../components/Button.jsx';
 
 function TambahBahanBaku({ isOpen, onClose, onSaveSuccess }) {
   const [kategoriList, setKategoriList] = useState([]);
   const [satuanList, setSatuanList] = useState([]);
   const [selectedKategori, setSelectedKategori] = useState(null);
-  const [formData, setFormData] = useState({});
+  // State untuk menyimpan semua data form, termasuk harga
+  const [formData, setFormData] = useState({
+    nama_barang: '',
+    satuan_barang_id: '',
+    harga: ''
+  });
   const [loading, setLoading] = useState({ kategori: false, satuan: false, save: false });
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+
+  // Fungsi untuk melacak render komponen
+  console.log("TambahBahanBaku component rendered");
 
   useEffect(() => {
     if (isOpen) {
@@ -31,6 +39,7 @@ function TambahBahanBaku({ isOpen, onClose, onSaveSuccess }) {
           if (satuanError) throw satuanError;
           setSatuanList(satuanData);
         } catch (err) {
+          console.error("Error fetching data:", err.message);
           setError('Gagal memuat data: ' + err.message);
         } finally {
           setLoading({ kategori: false, satuan: false, save: false });
@@ -43,21 +52,32 @@ function TambahBahanBaku({ isOpen, onClose, onSaveSuccess }) {
     }
   }, [isOpen]);
 
+  // Fungsi untuk melacak perubahan kategori
   const handleCategoryChange = (e) => {
     const kategoriId = e.target.value;
     const kategori = kategoriList.find(kat => kat.id.toString() === kategoriId);
     setSelectedKategori(kategori || null);
-    setFormData({});
+    setFormData({
+      ...formData,
+      kategori_barang_id: kategoriId
+    });
+    console.log("Kategori changed to:", kategoriId);
   };
 
+  // Fungsi untuk menangani input form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevData => ({ ...prevData, [name]: value }));
+    console.log("Form data updated:", { [name]: value });
   };
 
+  // Fungsi untuk menangani penyimpanan data ke database
   const handleSave = async () => {
-    if (!formData.nama_barang || !formData.jumlah || !formData.satuan_barang_id) {
-        setError("Nama barang, jumlah, dan satuan wajib diisi.");
+    console.log("Attempting to save data...");
+    // Menghapus validasi untuk jumlah
+    if (!formData.nama_barang || !formData.satuan_barang_id) {
+        setError("Nama barang dan satuan wajib diisi.");
+        console.error("Validation failed: Missing required fields.");
         return;
     }
     setLoading(prev => ({ ...prev, save: true }));
@@ -72,18 +92,19 @@ function TambahBahanBaku({ isOpen, onClose, onSaveSuccess }) {
             }
         });
 
-        // Perbaikan: Hapus parseInt dari ID yang bertipe UUID (teks)
         const newBahanBaku = {
             nama: formData.nama_barang,
             kategori_barang_id: selectedKategori.id,
-            jumlah: parseInt(formData.jumlah, 10),
-            satuan_barang_id: formData.satuan_barang_id, // ID satuan adalah UUID (teks), jadi tidak perlu parseInt
+            satuan_barang_id: formData.satuan_barang_id,
+            harga: parseFloat(formData.harga),
             atribut: atribut
         };
 
+        console.log("Inserting new bahan baku:", newBahanBaku);
         const { error: insertError } = await supabase.from('bahan_baku').insert([newBahanBaku]);
         if (insertError) throw insertError;
         
+        console.log("Data successfully saved!");
         setSuccessMessage('Data berhasil disimpan!');
         if (onSaveSuccess) onSaveSuccess();
         
@@ -92,6 +113,7 @@ function TambahBahanBaku({ isOpen, onClose, onSaveSuccess }) {
         }, 1500);
 
     } catch (err) {
+        console.error("Error saving data:", err.message);
         setError('Gagal menyimpan data: ' + err.message);
     } finally {
         setLoading(prev => ({ ...prev, save: false }));
@@ -163,19 +185,26 @@ function TambahBahanBaku({ isOpen, onClose, onSaveSuccess }) {
                   />
                 </div>
               ))}
+              
+              <div>
+                <label className="block text-sm font-medium mb-2" htmlFor="harga">Harga (Rp)</label>
+                <div className="flex items-center space-x-2">
+                    <span className="text-gray-300">Rp</span>
+                    <input
+                      type="number"
+                      id="harga"
+                      name="harga"
+                      value={formData.harga || ''}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 bg-transparent border border-gray-600 rounded-lg focus:outline-none focus:border-gray-400"
+                      placeholder="Masukkan harga"
+                    />
+                </div>
+              </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2" htmlFor="jumlah">Jumlah & Satuan Barang</label>
+                <label className="block text-sm font-medium mb-2" htmlFor="satuan_barang_id">Satuan Barang</label>
                 <div className="flex items-center space-x-2">
-                  <input
-                    type="number"
-                    id="jumlah"
-                    name="jumlah"
-                    value={formData.jumlah || ''}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 bg-transparent border border-gray-600 rounded-lg focus:outline-none focus:border-gray-400"
-                    placeholder="Jumlah"
-                  />
                   <select
                     id="satuan_barang_id"
                     name="satuan_barang_id"
@@ -219,4 +248,3 @@ function TambahBahanBaku({ isOpen, onClose, onSaveSuccess }) {
 }
 
 export default TambahBahanBaku;
-
