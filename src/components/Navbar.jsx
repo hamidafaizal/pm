@@ -9,6 +9,7 @@ function Navbar() {
     { name: 'Database Bahan Baku', path: '/gudang/database-bahan-baku' },
     { name: 'Bahan Baku', path: '/gudang/bahan-baku' },
     { name: 'Bahan Jadi', path: '/gudang/bahan-jadi' },
+    { name: 'Pengaturan', path: '/gudang/pengaturan' }, // Link baru ditambahkan
   ];
 
   return (
@@ -20,6 +21,7 @@ function Navbar() {
               <NavLink
                 key={item.name}
                 to={item.path}
+                end // Tambahkan prop 'end' untuk path yang lebih spesifik jika diperlukan
                 className={({ isActive }) =>
                   `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     isActive
@@ -39,3 +41,4 @@ function Navbar() {
 }
 
 export default Navbar;
+

@@ -6,7 +6,10 @@ import MainLayout from '../layouts/MainLayout';
 import GudangLayout from '../layouts/GudangLayout';
 import App from '../App';
 import Gudang from '../pages/Gudang';
-import DatabaseBahanBaku from '../pages/gudang/DatabaseBahanBaku'; // Impor halaman baru
+import DatabaseBahanBaku from '../pages/gudang/DatabaseBahanBaku';
+import Pengaturan from '../pages/gudang/Pengaturan';
+import KategoriBarang from '../pages/gudang/pengaturan/KategoriBarang';
+import SatuanBarang from '../pages/gudang/pengaturan/SatuanBarang';
 import PrivateRoute from './PrivateRoute';
 
 function AppRoute() {
@@ -29,8 +32,10 @@ function AppRoute() {
           {/* Rute dengan layout Gudang (dengan navbar) */}
           <Route path="/gudang" element={<GudangLayout />}>
             <Route index element={<Gudang />} />
-            {/* Sub-halaman Gudang */}
             <Route path="database-bahan-baku" element={<DatabaseBahanBaku />} />
+            <Route path="pengaturan" element={<Pengaturan />} />
+            <Route path="pengaturan/kategori-barang" element={<KategoriBarang />} />
+            <Route path="pengaturan/satuan-barang" element={<SatuanBarang />} />
           </Route>
         </Route>
       </Routes>
@@ -39,3 +44,4 @@ function AppRoute() {
 }
 
 export default AppRoute;
+

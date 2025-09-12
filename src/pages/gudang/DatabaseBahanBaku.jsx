@@ -1,16 +1,19 @@
-// src/pages/gudang/DatabaseBahanBaku.jsx
 import React from "react";
 import Button from "../../components/Button.jsx"; // Mengubah jalur impor agar sesuai
 import { Plus } from "lucide-react"; // Import ikon Plus
+import { useOutletContext } from "react-router-dom"; // Import hook untuk mendapatkan context dari layout
 
-export default function DatabaseBahanBaku({ onAdd }) {
+export default function DatabaseBahanBaku() {
+  const { onAdd } = useOutletContext();
+  console.log("onAdd function from context:", onAdd);
+
   const handleTambah = () => {
     // console.log untuk melacak klik tombol
     console.log("Tombol Tambah Bahan Baku diklik");
-    if (typeof onAdd === "function") {
+    if (onAdd) {
       onAdd();
     } else {
-      console.log("Fungsi onAdd tidak disediakan atau bukan fungsi.");
+      console.error("Fungsi onAdd tidak ditemukan di context.");
     }
   };
 
